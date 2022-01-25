@@ -2,7 +2,7 @@ import numpy as np
 import random
 from Fitness import fitness
 
-INERTIA_WEIGHT = 0.1
+INERTIA_WEIGHT = 1
 COGNITIVE_CONSTANT = 2
 SOCIAL_CONSTANT = 1
 

@@ -20,7 +20,7 @@ def distance(x, y):
 def total_distance(truck, data):
     truck.insert(0, 0)
     truck.append(0)
-    return sum([distance((data[i][X], data[i][Y]), (data[i + 1][X], data[i + 1][Y])) for i in range(len(truck))])
+    return sum([distance((data[truck[i]][X], data[truck[i]][Y]), (data[truck[i + 1]][X], data[truck[i + 1]][Y])) for i in range(len(truck) - 1)])
 
 
 def extract_indices(customers):
@@ -30,8 +30,6 @@ def extract_indices(customers):
 
 
 def decode(particle, data):
-    # positions_with_indices = list(zip(particle.position, indices))
-    # positions_with_indices.sort(key=lambda x: x[0])
     customers = extract_indices(particle.position)
     trucks = []
     prev_customer = (data[0][X], data[0][Y])
@@ -69,8 +67,6 @@ def decode(particle, data):
 
 
 def decode_from_position(position, particle_capacity):
-    # positions_with_indices = list(zip(position, indices))
-    # positions_with_indices.sort(key=lambda x: x[0])
     customers = extract_indices(position)
     trucks = []
     prev_customer = (data[0][X], data[0][Y])

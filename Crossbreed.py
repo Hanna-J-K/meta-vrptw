@@ -1,10 +1,15 @@
 import numpy as np
 from Encoding import extract_indices
+import random
+
+mutation_probability = 0.0
 
 
 def crossover(a_pos, b_pos):
     a_decoded = extract_indices(a_pos)
     b_decoded = extract_indices(b_pos)
+    if random.random() <= mutation_probability:
+        a_decoded = random.sample(a_decoded, len(a_decoded))
     return [a_pos[index - 1] for index in erx(a_decoded, b_decoded)]
 
 
