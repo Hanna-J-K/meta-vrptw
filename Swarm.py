@@ -4,10 +4,10 @@ from Particle import Particle
 import matplotlib.pyplot as plt
 import random
 from Crossbreed import crossover
-from Encoding import decode_from_position
+from Encoding import decode
 
-POPULATION = 10
-ITERATIONS = 25
+POPULATION = 50
+ITERATIONS = 100
 
 
 def generate_swarm():
@@ -45,7 +45,7 @@ def find_minimum(swarm):
 if __name__ == '__main__':
     swarm = generate_swarm()
     best_positions, best_adaptations = find_minimum(swarm)
-    trucks = decode_from_position(best_positions[-1])
+    trucks = decode(best_positions[-1])
     print(len(trucks), best_adaptations[-1])
     print(trucks)
     plt.plot(np.arange(ITERATIONS), best_adaptations)

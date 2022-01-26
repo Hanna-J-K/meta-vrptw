@@ -18,7 +18,7 @@ def can_travel(truck, capacity, time, customer):
     due_date = DATA[customer][DUE_DATE]
     travel_time = math.floor(DISTANCES[last][customer])
 
-    return capacity >= customer_demand or time + travel_time <= due_date
+    return capacity >= customer_demand and time + travel_time <= due_date
 
 
 def nearest_neighbour(truck):
@@ -34,7 +34,7 @@ def nearest_neighbour(truck):
                 nearest = customer
         ready_time = DATA[nearest][READY_TIME]
         service_time = DATA[nearest][SERVICE_TIME]
-        travel_time = DISTANCES[current][nearest]
+        travel_time = math.floor(DISTANCES[current][nearest])
         current = nearest
         if time + travel_time < ready_time:
             time = ready_time
@@ -44,9 +44,9 @@ def nearest_neighbour(truck):
         new_truck.append(nearest)
         copy.remove(nearest)
         if not can_travel(new_truck, np.inf, time, nearest):
-            return truck
+            return truck.copy()
 
-    return new_truck if total_distance(new_truck, DATA) < total_distance(truck, DATA) else truck
+    return new_truck.copy() if total_distance(new_truck) < total_distance(truck) else truck.copy()
 
 
 def distance(x, y):
@@ -54,9 +54,10 @@ def distance(x, y):
 
 
 def total_distance(truck):
-    truck.insert(0, 0)
-    truck.append(0)
-    return sum([DISTANCES[truck[i]][truck[i + 1]] for i in range(len(truck) - 1)])
+    copy = truck.copy()
+    copy.insert(0, 0)
+    copy.append(0)
+    return sum([DISTANCES[copy[i]][copy[i + 1]] for i in range(len(copy) - 1)])
 
 
 def extract_indices(customers):
@@ -65,17 +66,14 @@ def extract_indices(customers):
     return [x[1] for x in positions_with_indices]
 
 
-def decode(particle):
-    customers = extract_indices(particle.position)
+def decode(position):
+    customers = extract_indices(position)
     trucks = []
-    truck = []
-    capacity = particle.capacity
-    time = 0
 
     for _ in range(100):  # bo 100 truckow
         truck = []
         time = 0
-        capacity = particle.capacity
+        capacity = CAPACITY
         prev_customer = 0
         for customer in customers:
             customer_demand = DATA[customer][DEMAND]
@@ -93,44 +91,7 @@ def decode(particle):
                 truck.append(customer)
                 customers.remove(customer)
         if len(truck) > 0:
-            # trucks.append(nearest_neighbour(truck))
-            trucks.append(truck)
-
-    return trucks
-
-
-def decode_from_position(position):
-    customers = extract_indices(position)
-    trucks = []
-    prev_customer = 0
-    truck = []
-    capacity = CAPACITY
-    time = 0
-
-    for _ in range(100):  # bo 100 truckow
-        truck = []
-        time = 0
-        capacity = CAPACITY
-        prev_customer = 0
-        for customer in customers:
-            customer_demand = DATA[customer][DEMAND]
-            ready_time = DATA[customer][READY_TIME]
-            due_date = DATA[customer][DUE_DATE]
-            service_time = DATA[customer][SERVICE_TIME]
-            travel_time = math.floor(DISTANCES[prev_customer][customer])
-            if capacity < customer_demand or time + travel_time > due_date:
-                continue
-            if time + travel_time < ready_time:
-                time = ready_time
-            else:
-                time += travel_time
-            time += service_time
-            capacity -= customer_demand
-            prev_customer = customer
-            truck.append(customer)
-            customers.remove(customer)
-        if len(truck) > 0:
-            # trucks.append(nearest_neighbour(truck)[1:-1])
-            trucks.append(truck)
+            trucks.append(nearest_neighbour(truck))
+            # trucks.append(truck)
 
     return trucks
