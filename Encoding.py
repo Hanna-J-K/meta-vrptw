@@ -49,6 +49,33 @@ def nearest_neighbour(truck):
     return new_truck.copy() if total_distance(new_truck) < total_distance(truck) else truck.copy()
 
 
+def two_opt_swap(truck):
+    copy = truck.copy()
+    new_truck = []
+    best_truck = truck.copy()
+    best_distance = total_distance(copy)
+
+    for i in range(len(copy) - 1):
+        for k in range(i+1, len(copy)):
+            if k-i == 1: 
+                continue
+            new_truck[i:k] = copy[k-1:i-1:-1]
+            time = 0
+            for j in range(1, len(new_truck)):
+                if can_travel(new_truck[:j], np.inf, time, new_truck[j]) and total_distance(new_truck) < best_distance:
+                    best_distance = total_distance(new_truck)
+                    best_truck = new_truck
+                ready_time = DATA[new_truck[j]][READY_TIME]
+                service_time = DATA[new_truck[j]][SERVICE_TIME]
+                travel_time = math.floor(DISTANCES[new_truck[j-1]][new_truck[j]])
+                if time + travel_time < ready_time:
+                    time = ready_time
+                else:
+                    time += travel_time
+                time += service_time
+    return best_truck
+
+
 def distance(x, y):
     return math.sqrt((y[0] - x[0])**2 + (y[1] - x[1])**2)
 
@@ -91,7 +118,7 @@ def decode(position):
                 truck.append(customer)
                 customers.remove(customer)
         if len(truck) > 0:
-            trucks.append(nearest_neighbour(truck))
+            trucks.append(two_opt_swap(nearest_neighbour(truck)))
             # trucks.append(truck)
 
     return trucks

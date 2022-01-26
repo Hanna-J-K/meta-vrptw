@@ -7,7 +7,7 @@ from Crossbreed import crossover
 from Encoding import decode
 
 POPULATION = 50
-ITERATIONS = 100
+ITERATIONS = 25
 
 
 def generate_swarm():
