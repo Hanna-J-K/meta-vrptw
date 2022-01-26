@@ -3,8 +3,8 @@ import random
 from Fitness import fitness
 
 INERTIA_WEIGHT = 1
-COGNITIVE_CONSTANT = 2
-SOCIAL_CONSTANT = 1
+COGNITIVE_CONSTANT = 1
+SOCIAL_CONSTANT = 2
 
 
 global_best_x = 0
