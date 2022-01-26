@@ -6,8 +6,8 @@ import random
 from Crossbreed import crossover
 from Encoding import decode
 
-POPULATION = 50
-ITERATIONS = 25
+POPULATION = 200
+ITERATIONS = 100
 
 
 def generate_swarm():
@@ -15,7 +15,7 @@ def generate_swarm():
 
 
 def find_minimum(swarm):
-    crossover_probability = 1
+    crossover_probability = 0.9
     global_best_adaptation = np.inf
     global_best_position = None
     best_positions = []

@@ -2,7 +2,7 @@ import numpy as np
 from Encoding import extract_indices
 import random
 
-mutation_probability = 0.5
+mutation_probability = 0.0
 
 
 def crossover(a_pos, b_pos):

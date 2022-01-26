@@ -55,24 +55,33 @@ def two_opt_swap(truck):
     best_truck = truck.copy()
     best_distance = total_distance(copy)
 
+    if len(best_truck) < 4:
+        return best_truck
+
     for i in range(len(copy) - 1):
-        for k in range(i+1, len(copy)):
-            if k-i == 1: 
+        for k in range(i+1, len(copy) + 1):
+            if k-i == 1:
                 continue
-            new_truck[i:k] = copy[k-1:i-1:-1]
+            new_truck = copy.copy()
+            new_truck[i:k+1] = new_truck[i:k+1][::-1]
             time = 0
             for j in range(1, len(new_truck)):
                 if can_travel(new_truck[:j], np.inf, time, new_truck[j]) and total_distance(new_truck) < best_distance:
                     best_distance = total_distance(new_truck)
-                    best_truck = new_truck
+                    best_truck = new_truck.copy()
+                else:
+                    best_truck = copy.copy()
+                    break
                 ready_time = DATA[new_truck[j]][READY_TIME]
                 service_time = DATA[new_truck[j]][SERVICE_TIME]
-                travel_time = math.floor(DISTANCES[new_truck[j-1]][new_truck[j]])
+                travel_time = math.floor(
+                    DISTANCES[new_truck[j-1]][new_truck[j]])
                 if time + travel_time < ready_time:
                     time = ready_time
                 else:
                     time += travel_time
                 time += service_time
+
     return best_truck
 
 
@@ -119,6 +128,15 @@ def decode(position):
                 customers.remove(customer)
         if len(truck) > 0:
             trucks.append(two_opt_swap(nearest_neighbour(truck)))
+            # trucks.append(nearest_neighbour(truck))
             # trucks.append(truck)
 
     return trucks
+
+
+def encode(particle):
+    positions_with_indices = list(zip(particle.position, indices))
+    positions_with_indices.sort(key=lambda x: x[1])
+    order = [item for inner in particle.decoded for item in inner]
+    return [next(
+        (position[0] for position in positions_with_indices if position[1] == index), None) for index in order]
