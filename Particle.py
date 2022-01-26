@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from Fitness import fitness
+from Params import CAPACITY
 
 INERTIA_WEIGHT = 1
 COGNITIVE_CONSTANT = 1
@@ -15,7 +16,7 @@ rng = np.random.default_rng()
 
 
 class Particle():
-    def __init__(self, capacity: int):
+    def __init__(self):
         self.velocity = [0] * 100
         self.position = random.sample(range(1, 101), 100)
         # self.position = list(range(1, 101))
@@ -25,7 +26,7 @@ class Particle():
         self.best_y = 0
         self.best_adaptation = np.inf
         self.trucks = 100
-        self.capacity = capacity
+        self.capacity = CAPACITY
         self.decoded = None
 
     def calculate_inertia(self):
