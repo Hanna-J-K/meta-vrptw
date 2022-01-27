@@ -8,8 +8,8 @@ import Encoding
 from Params import DATA
 import reader
 
-POPULATION = 10
-ITERATIONS = 25
+POPULATION = 200
+ITERATIONS = 100
 
 
 def generate_swarm():
@@ -47,6 +47,7 @@ def find_minimum(swarm):
 
     return best_positions, best_adaptations
 
+
 def refresh_data(name, capacity):
     global DATA
     FILENAME = name
@@ -59,10 +60,8 @@ def refresh_data(name, capacity):
 
     Particle.CAPACITY = capacity
 
-    
 
-def draw_swarm(args):
-    name, capacity = args
+def draw_swarm(name, capacity):
     refresh_data(name, capacity)
     print(name)
     swarm = generate_swarm()

@@ -1,5 +1,4 @@
 from Swarm import draw_swarm
-import multiprocessing
 
 if __name__ == "__main__":
     names = ['C101.txt', 'C102.txt', 'C103.txt',     # 200
@@ -15,6 +14,5 @@ if __name__ == "__main__":
                   200, 200, 200,
                   1000, 1000, 1000]
 
-    pool = multiprocessing.Pool()
-    input = zip(names, capacities)
-    pool.map(draw_swarm, input)
+    for name, capacity in zip(names, capacities):
+        draw_swarm(name, capacity)

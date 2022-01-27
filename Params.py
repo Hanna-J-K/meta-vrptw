@@ -1,7 +1,7 @@
 import reader
 
-FILENAME = 'RC201.txt'
-CAPACITY = 1000
+FILENAME = 'C203.txt'
+CAPACITY = 700
 DATA = reader.read_file(FILENAME)
 DISTANCES = reader.distance_array(FILENAME).tolist()
 
